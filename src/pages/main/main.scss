@@ -1,0 +1,14 @@
+main-page {
+
+  ion-list {
+    margin-top: 0px !important;
+  }
+
+  .remainingAlert {
+    background-color: color($colors, danger);
+    padding: 5px;
+    font-size: 20px;
+    color: white;
+  }
+
+}

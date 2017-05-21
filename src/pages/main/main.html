@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar color="light">
+    <ion-title>Calculadora de Financiación</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list inset>
+
+    <ion-item>
+      <ion-label floating>Costo Propiedad</ion-label>
+      <ion-input type="number" clearInput></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Inicial</ion-label>
+      <ion-input type="number"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Cantidad de Cuotas</ion-label>
+      <ion-input type="number"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Costo de Cuota</ion-label>
+      <ion-input type="number"></ion-input>
+    </ion-item>
+
+    <ion-item></ion-item>
+
+  </ion-list>
+
+  <div class="remainingAlert" text-center>Faltan $ 3.000</div>
+
+  <h3>Cuotas Especiales</h3>
+
+  <ion-fab right bottom>
+    <button ion-fab color="primary"><ion-icon name="menu"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab><ion-icon name="refresh"></ion-icon><ion-label>Limpiar Formulario</ion-label></button>
+      <button ion-fab><ion-icon name="calendar"></ion-icon><ion-label>Agregar Cuota Especial</ion-label></button>
+    </ion-fab-list>
+  </ion-fab>
+
+</ion-content>

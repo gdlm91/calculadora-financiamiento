@@ -7,41 +7,70 @@
 
 <ion-content padding>
 
-  <ion-list inset>
+  <form [formGroup]="form">
 
-    <ion-item>
-      <ion-label floating>Costo Propiedad</ion-label>
-      <ion-input type="number" clearInput></ion-input>
-    </ion-item>
+    <!-- Main Form -->
+    <ion-list inset>
 
-    <ion-item>
-      <ion-label floating>Inicial</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label floating>Costo Propiedad</ion-label>
+        <ion-input type="number" clearInput formControlName="cost"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label floating>Cantidad de Cuotas</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label floating>Inicial</ion-label>
+        <ion-input type="number" formControlName="init"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label floating>Costo de Cuota</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label floating>Cantidad de Cuotas</ion-label>
+        <ion-input type="number" formControlName="feeQty"></ion-input>
+      </ion-item>
 
-    <ion-item></ion-item>
+      <ion-item>
+        <ion-label floating>Costo de Cuota</ion-label>
+        <ion-input type="number" formControlName="feeCost"></ion-input>
+      </ion-item>
 
-  </ion-list>
+      <ion-item></ion-item>
 
-  <div class="remainingAlert" text-center>Faltan $ 3.000</div>
+    </ion-list>
 
-  <h3>Cuotas Especiales</h3>
+    <div class="alert lower" text-center *ngIf="rest > 0">Faltan {{ rest | currency }}</div>
 
+    <div class="alert greater" text-center *ngIf="rest < 0">Sobran {{ rest | currency }}</div>
+
+    <!-- Extras Form -->
+    <h3>Cuotas Especiales</h3>
+
+    <div formArrayName="extraFees">
+
+      <div *ngFor="let fee of extraFees.controls; let i = index" [formGroupName]="i" style="margin-top: 25px">
+
+        <h4>Cuota Especial # {{i}} <button ion-button small color="danger" float-right (click)="removeExtraFee(i)">eliminar</button></h4>
+
+        <ion-item>
+          <ion-label floating>Nombre de Cuota:</ion-label>
+          <ion-input type="string" formControlName="name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Costo de Cuota:</ion-label>
+          <ion-input type="number" formControlName="cost"></ion-input>
+        </ion-item>
+
+      </div>
+
+    </div>
+
+  </form>
+
+  <!-- Fab Button -->
   <ion-fab right bottom>
     <button ion-fab color="primary"><ion-icon name="menu"></ion-icon></button>
     <ion-fab-list side="top">
-      <button ion-fab><ion-icon name="refresh"></ion-icon><ion-label>Limpiar Formulario</ion-label></button>
-      <button ion-fab><ion-icon name="calendar"></ion-icon><ion-label>Agregar Cuota Especial</ion-label></button>
+      <button ion-fab><ion-icon name="refresh" (click)="refresh()"></ion-icon><ion-label>Limpiar Formulario</ion-label></button>
+      <button ion-fab><ion-icon name="calendar" (click)="addExtraFee()"></ion-icon><ion-label>Agregar Cuota Especial</ion-label></button>
     </ion-fab-list>
   </ion-fab>
 

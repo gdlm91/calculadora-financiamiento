@@ -4,11 +4,18 @@ main-page {
     margin-top: 0px !important;
   }
 
-  .remainingAlert {
-    background-color: color($colors, danger);
+  .alert {
     padding: 5px;
     font-size: 20px;
     color: white;
+
+    &.lower {
+      background-color: color($colors, danger);
+    }
+
+    &.greater {
+      background-color: color($colors, secondary);
+    }
   }
 
 }

@@ -1,6 +1,6 @@
 export interface ICalculation {
   cost: number;
-  init: number;
+  prepayment: number;
   feeQty: number;
   feeCost: number;
   extraFees?: ExtraFee[];
@@ -8,7 +8,7 @@ export interface ICalculation {
 
 export class Calculation implements ICalculation {
   cost = 0;
-  init = 0;
+  prepayment = 0;
   feeQty = 0;
   feeCost = 0;
 }

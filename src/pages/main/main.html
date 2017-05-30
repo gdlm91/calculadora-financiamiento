@@ -19,7 +19,14 @@
 
       <ion-item>
         <ion-label floating>Inicial</ion-label>
-        <ion-input type="number" formControlName="init"></ion-input>
+        <ion-input type="number" [value]="init" readonly="readonly"></ion-input>
+      </ion-item>
+
+      <h4>Financiación</h4>
+
+      <ion-item>
+        <ion-label floating>Pago Adelantado</ion-label>
+        <ion-input type="number" formControlName="prepayment"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -66,11 +73,11 @@
   </form>
 
   <!-- Fab Button -->
-  <ion-fab right bottom>
+  <ion-fab right bottom #fab>
     <button ion-fab color="primary"><ion-icon name="menu"></ion-icon></button>
     <ion-fab-list side="top">
-      <button ion-fab><ion-icon name="refresh" (click)="refresh()"></ion-icon><ion-label>Limpiar Formulario</ion-label></button>
-      <button ion-fab><ion-icon name="calendar" (click)="addExtraFee()"></ion-icon><ion-label>Agregar Cuota Especial</ion-label></button>
+      <button ion-fab (click)="refresh(fab)"><ion-icon name="refresh"></ion-icon><ion-label>Limpiar Formulario</ion-label></button>
+      <button ion-fab (click)="addExtraFee(fab)"><ion-icon name="calendar"></ion-icon><ion-label>Agregar Cuota Especial</ion-label></button>
     </ion-fab-list>
   </ion-fab>
 

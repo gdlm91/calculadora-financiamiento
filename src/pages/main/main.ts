@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FabContainer } from 'ionic-angular';
 
 import { Calculation, ExtraFee } from '../../app/data-model.ts';
 
@@ -10,7 +11,7 @@ import { Calculation, ExtraFee } from '../../app/data-model.ts';
 export class MainPage implements OnInit {
 
   form: FormGroup;
-  formValue: any;
+  init: number;
   rest: number;
 
   constructor(private fb: FormBuilder) {
@@ -26,22 +27,12 @@ export class MainPage implements OnInit {
       (value) => {
         let extraFeesTotal: number = 0;
 
-        this.formValue = value;
+        this.init = value.cost * 0.3;
 
-        this.formValue.extraFees.map((fee) => extraFeesTotal += fee.cost);
+        value.extraFees.map((fee) => extraFeesTotal += fee.cost);
 
-        this.rest = value.cost - value.init - (value.feeQty * value.feeCost) - extraFeesTotal;
+        this.rest = this.init - value.prepayment - (value.feeQty * value.feeCost) - extraFeesTotal;
       })
-  }
-
-  refresh() {
-    this.form.reset({
-      cost: 0,
-      init: 0,
-      feeQty: 0,
-      feeCost: 0,
-      extraFees: []
-    });
   }
 
   createForm() {
@@ -54,8 +45,22 @@ export class MainPage implements OnInit {
     return this.form.get('extraFees') as FormArray;
   }
 
-  addExtraFee() {
+  refresh(fab: FabContainer) {
+    this.form.reset({
+      cost: 0,
+      prepayment: 0,
+      feeQty: 0,
+      feeCost: 0,
+      extraFees: []
+    });
+
+    fab.close();
+  }
+
+  addExtraFee(fab: FabContainer) {
     this.extraFees.push(this.fb.group(new ExtraFee()));
+
+    fab.close();
   }
 
   removeExtraFee(i: number) {

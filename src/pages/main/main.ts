@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { FabContainer } from 'ionic-angular';
+import { Observable } from "rxjs/Observable";
 
-import { Calculation, ExtraFee } from '../../app/data-model.ts';
+import { Calculation, ExtraFee, ICalculation } from '../../model';
+import { FinancingService, IFinancing } from '../../providers/financing/financing.service';
 
 @Component({
   selector: 'main-page',
@@ -11,48 +13,24 @@ import { Calculation, ExtraFee } from '../../app/data-model.ts';
 export class MainPage implements OnInit {
 
   form: FormGroup;
-  init: number;
-  rest: number;
+  calculation$: Observable<IFinancing>;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private financingService: FinancingService
+  ) {
     this.createForm();
   }
 
   ngOnInit() {
+    this.calculation$ = this.financingService.calculation$;
+
     this.calculateForm();
   }
 
-  calculateForm() {
-    this.form.valueChanges.forEach(
-      (value) => {
-        let extraFeesTotal: number = 0;
-
-        this.init = value.cost * 0.3;
-
-        value.extraFees.map((fee) => extraFeesTotal += fee.cost);
-
-        this.rest = this.init - value.prepayment - (value.feeQty * value.feeCost) - extraFeesTotal;
-      })
-  }
-
-  createForm() {
-    this.form = this.fb.group(new Calculation());
-
-    this.form.addControl('extraFees', this.fb.array([]));
-  }
-
-  get extraFees(): FormArray {
-    return this.form.get('extraFees') as FormArray;
-  }
-
   refresh(fab: FabContainer) {
-    this.form.reset({
-      cost: 0,
-      prepayment: 0,
-      feeQty: 0,
-      feeCost: 0,
-      extraFees: []
-    });
+    this.form.reset(new Calculation());
+    this.form.setControl('extraFees', this.fb.array([]));
 
     fab.close();
   }
@@ -65,6 +43,22 @@ export class MainPage implements OnInit {
 
   removeExtraFee(i: number) {
     this.extraFees.removeAt(i);
+  }
+
+  get extraFees(): FormArray {
+    return this.form.get('extraFees') as FormArray;
+  }
+
+  private createForm() {
+    this.form = this.fb.group(new Calculation());
+
+    // Had to change this to set instead of add... new Calcualtion() creates a control from and array.
+    this.form.setControl('extraFees', this.fb.array([]));
+  }
+
+  private calculateForm() {
+    this.form.valueChanges.forEach(
+      (formValue: ICalculation) => this.financingService.calculate(formValue))
   }
 
 }

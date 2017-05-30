@@ -1,3 +1,5 @@
+import { ExtraFee } from "./ExtraFee";
+
 export interface ICalculation {
   cost: number;
   prepayment: number;
@@ -11,14 +13,5 @@ export class Calculation implements ICalculation {
   prepayment = 0;
   feeQty = 0;
   feeCost = 0;
-}
-
-export interface IExtraFee {
-  cost: number;
-  name: string;
-}
-
-export class ExtraFee implements IExtraFee {
-  cost: number = 0;
-  name: string = '';
+  extraFees = [];
 }

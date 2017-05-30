@@ -19,7 +19,7 @@
 
       <ion-item>
         <ion-label floating>Inicial</ion-label>
-        <ion-input type="number" [value]="init" readonly="readonly"></ion-input>
+        <ion-input type="number" [value]="(calculation$ | async)?.init" readonly="readonly"></ion-input>
       </ion-item>
 
       <h4>Financiación</h4>
@@ -43,9 +43,9 @@
 
     </ion-list>
 
-    <div class="alert lower" text-center *ngIf="rest > 0">Faltan {{ rest | currency }}</div>
+    <div class="alert lower" text-center *ngIf="(calculation$ | async)?.rest > 0">Faltan {{ (calculation$ | async)?.rest | currency }}</div>
 
-    <div class="alert greater" text-center *ngIf="rest < 0">Sobran {{ rest | currency }}</div>
+    <div class="alert greater" text-center *ngIf="(calculation$ | async)?.rest < 0">Sobran {{ (calculation$ | async)?.rest | currency }}</div>
 
     <!-- Extras Form -->
     <h3>Cuotas Especiales</h3>
@@ -54,7 +54,7 @@
 
       <div *ngFor="let fee of extraFees.controls; let i = index" [formGroupName]="i" style="margin-top: 25px">
 
-        <h4>Cuota Especial # {{i}} <button ion-button small color="danger" float-right (click)="removeExtraFee(i)">eliminar</button></h4>
+        <h4>Cuota Especial # {{i + 1}} <button ion-button small color="danger" float-right (click)="removeExtraFee(i)">eliminar</button></h4>
 
         <ion-item>
           <ion-label floating>Nombre de Cuota:</ion-label>

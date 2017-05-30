@@ -35,7 +35,7 @@ export class FinancingService {
   private calculateExtraFees(extraFees: IExtraFee[]): number {
     let extraFeesTotal: number = 0;
 
-    extraFees.map((fee) => extraFeesTotal += fee.cost);
+    extraFees.map((fee) => extraFeesTotal += Number(fee.cost)); // TODO: why getting this as string?
 
     return extraFeesTotal;
   }
@@ -44,8 +44,6 @@ export class FinancingService {
     if (feeQty < 1) return 0;
 
     let feeCost = Math.floor(restWOExtraFees / feeQty);
-
-    console.log('CalculateFeeCost', feeCost);
 
     return feeCost;
   }

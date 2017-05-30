@@ -46,7 +46,6 @@ export class MainPage implements OnInit {
   }
 
   setFeeCost(feeCost: number) {
-    console.log(feeCost);
     this.form.get('feeCost').setValue(feeCost);
   }
 

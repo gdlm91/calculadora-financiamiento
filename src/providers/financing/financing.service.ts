@@ -6,10 +6,11 @@ import { ICalculation, IExtraFee } from '../../model/'
 export interface IFinancing {
   init: number;
   rest: number;
+  feeCost: number;
 }
 
 export class Financing implements IFinancing {
-  constructor(public init: number = 0, public rest: number = 0) { }
+  constructor(public init: number = 0, public rest: number = 0, public feeCost: number = 0) { }
 }
 
 @Injectable()
@@ -22,9 +23,13 @@ export class FinancingService {
   calculate(formValue: ICalculation) {
     let init = formValue.cost * 0.3;
 
-    let rest = init - formValue.prepayment - (formValue.feeQty * formValue.feeCost) - this.calculateExtraFees(formValue.extraFees || []);
+    let restWOExtraFees = init - formValue.prepayment - this.calculateExtraFees(formValue.extraFees || []);
 
-    this.calculationSubject.next(new Financing(init, rest));
+    let feeCost = this.calculateFeeCost(restWOExtraFees, formValue.feeQty);
+
+    let rest = restWOExtraFees - (formValue.feeQty * formValue.feeCost);
+
+    this.calculationSubject.next(new Financing(init, rest, feeCost));
   }
 
   private calculateExtraFees(extraFees: IExtraFee[]): number {
@@ -33,6 +38,16 @@ export class FinancingService {
     extraFees.map((fee) => extraFeesTotal += fee.cost);
 
     return extraFeesTotal;
+  }
+
+  private calculateFeeCost(restWOExtraFees: number, feeQty: number): number {
+    if (feeQty < 1) return 0;
+
+    let feeCost = Math.floor(restWOExtraFees / feeQty);
+
+    console.log('CalculateFeeCost', feeCost);
+
+    return feeCost;
   }
 
 }

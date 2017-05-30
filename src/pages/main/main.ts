@@ -45,6 +45,11 @@ export class MainPage implements OnInit {
     this.extraFees.removeAt(i);
   }
 
+  setFeeCost(feeCost: number) {
+    console.log(feeCost);
+    this.form.get('feeCost').setValue(feeCost);
+  }
+
   get extraFees(): FormArray {
     return this.form.get('extraFees') as FormArray;
   }

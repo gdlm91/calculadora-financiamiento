@@ -7,7 +7,7 @@
 
 <ion-content padding>
 
-  <form [formGroup]="form">
+  <form [formGroup]="form" *ngIf="calculation$ | async; let calculation">
 
     <!-- Main Form -->
     <ion-list inset>
@@ -19,13 +19,13 @@
 
       <ion-item>
         <ion-label floating>Inicial</ion-label>
-        <ion-input type="number" [value]="(calculation$ | async)?.init" readonly="readonly"></ion-input>
+        <ion-input type="number" [value]="calculation.init" readonly="readonly"></ion-input>
       </ion-item>
 
       <h4>Financiación</h4>
 
       <ion-item>
-        <ion-label floating>Pago Adelantado</ion-label>
+        <ion-label floating>Separación</ion-label>
         <ion-input type="number" formControlName="prepayment"></ion-input>
       </ion-item>
 
@@ -39,13 +39,15 @@
         <ion-input type="number" formControlName="feeCost"></ion-input>
       </ion-item>
 
-      <ion-item></ion-item>
+      <ion-item>
+        <button ion-button color="light" block *ngIf="calculation.feeCost" (click)="setFeeCost(calculation.feeCost)">Usar cuota sugerida: {{ calculation.feeCost | currency:'USD':true }}</button>
+      </ion-item>
 
     </ion-list>
 
-    <div class="alert lower" text-center *ngIf="(calculation$ | async)?.rest > 0">Faltan {{ (calculation$ | async)?.rest | currency }}</div>
+    <div class="alert lower" text-center *ngIf="calculation.rest > 0">Faltan {{ calculation.rest | currency:'USD':true }}</div>
 
-    <div class="alert greater" text-center *ngIf="(calculation$ | async)?.rest < 0">Sobran {{ (calculation$ | async)?.rest | currency }}</div>
+    <div class="alert greater" text-center *ngIf="calculation.rest < 0">Sobran {{ calculation.rest | currency:'USD':true }}</div>
 
     <!-- Extras Form -->
     <h3>Cuotas Especiales</h3>
